@@ -13,9 +13,12 @@ if __name__ == 'main':
     logging.basicConfig(level=args.log_level)
     logger = logging.getLogger()
 
+    config = None
     with open(args.config, 'r') as config_file:
         try:
-            config = yaml.load(config_file)
-            preprocessor = preprocessor.Preprocessor()
+            config = yaml.load(config_file)            
         except Exception as e:
             logger.error(e)
+                
+    preprocessor = preprocessor.Preprocessor(config['preprocessing'], logger)
+    train_x, train_y, validate_x, validate_y, test_X = preprocessor.process()
