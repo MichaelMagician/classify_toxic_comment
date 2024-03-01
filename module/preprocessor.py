@@ -24,7 +24,7 @@ class Preprocessor:
 
         # split x and y from train data; tokenize X
         X, y = self._parse(train_data, False)
-        test_X, id = self._parse(test_data, True)
+        test_X, ids = self._parse(test_data, True)
 
         train_x, validate_x, train_y, validate_y = train_test_split(X, y, test_size=self.config['split_ratio'], random_state=self.config['random_state'])
 
@@ -34,7 +34,7 @@ class Preprocessor:
             train_x, validate_x, test_X = self.count_vectorization(train_x, validate_x, test_X)         
         else:
             raise Exception('not supported convertor')    
-        return train_x, train_y, validate_x, validate_y, test_X
+        return train_x, train_y, validate_x, validate_y, test_X, ids
     
     def _parse(self, df: DataFrame, is_test=False):
         '''

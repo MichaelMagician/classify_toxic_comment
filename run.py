@@ -1,7 +1,7 @@
 import logging
 import yaml
 import argparse
-from module import preprocessor, predictor
+from module import preprocessor, predictor, trainer
 
 if __name__ == 'main':
     # set up logging
@@ -21,4 +21,13 @@ if __name__ == 'main':
             logger.error(e)
                 
     preprocessor = preprocessor.Preprocessor(config['preprocessing'], logger)
-    train_x, train_y, validate_x, validate_y, test_X = preprocessor.process()
+    train_x, train_y, validate_x, validate_y, test_X, ids = preprocessor.process()
+    trainer = trainer.Trainer(config['training'], logger)
+    model = trainer.fit(train_x, train_y)
+    metrics = trainer.validate(validate_x, validate_y)
+    print(metrics + ': ' + metrics)
+
+    predictor = predictor.Predictor(config['training'], logger)
+    probs = predictor.predict(test_X)
+    predictors = predictor.save_csv(ids, probs)
+
