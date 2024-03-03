@@ -1,0 +1,10 @@
+venv
+requirement.txt
+folder structure
+config
+preprocessor
+trainer
+predictor
+metrics
+
+first model: naive bayes
