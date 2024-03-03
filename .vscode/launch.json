@@ -9,9 +9,11 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
-            "console": "integratedTerminal",            
-            "args": ["--config config/nb_config.yaml"]
-            
+            "console": "integratedTerminal",
+            "args": [
+                "--config",
+                "./config/nb_config.yaml"
+            ]
         }
     ]
 }

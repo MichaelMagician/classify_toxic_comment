@@ -4,13 +4,12 @@ from sklearn.metrics import accuracy_score
 class Trainer:
     def __init__(self,config, logger):
         self.config = config
-        self.logger = logger
-        self.classes = config['classes']
+        self.logger = logger        
         self.select_model()
 
     def select_model(self):
         if self.config['model_name'] == 'naivebayse':
-            self.model = NaiveBayes(self.classes, self.logger)
+            self.model = NaiveBayes(self.config['classes'], self.logger)
 
     def fit(self, X, y):
         self.model.fit(X, y)

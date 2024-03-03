@@ -5,6 +5,7 @@ import pandas as pd
 from pandas import DataFrame
 import nltk
 from sklearn.feature_extraction.text import CountVectorizer
+import numpy as np
 
 class Preprocessor:
 
@@ -18,7 +19,10 @@ class Preprocessor:
     def _get_test_data(self):
         return pd.read_csv(self.config['input_testset'])
 
-    def process(self):
+    def process(self) ->tuple[np.ndarray, np.ndarray,np.ndarray,np.ndarray,np.ndarray]:
+        '''
+        return train_x, train_y, validate_x, validate_y, test_X, ids
+        '''
         test_data = self._get_test_data()
         train_data = self._get_train_data()
 
@@ -26,7 +30,7 @@ class Preprocessor:
         X, y = self._parse(train_data, False)
         test_X, ids = self._parse(test_data, True)
 
-        train_x, validate_x, train_y, validate_y = train_test_split(X, y, test_size=self.config['split_ratio'], random_state=self.config['random_state'])
+        train_x, validate_x, train_y, validate_y = train_test_split(X, y, test_size=self.config['split_ratio'], random_state=self.config['random_seed'])
 
         # vectorize
         input_convertor = self.config['input_convertor']
@@ -36,9 +40,9 @@ class Preprocessor:
             raise Exception('not supported convertor')    
         return train_x, train_y, validate_x, validate_y, test_X, ids
     
-    def _parse(self, df: DataFrame, is_test=False):
+    def _parse(self, df: DataFrame, is_test=False) -> tuple[np.ndarray, np.ndarray]:
         '''
-        split x and y
+        split x and y. In addition, tokenize X
         returns:
             tokenrized_input(np.array)  #[I, love, nyc]
             n_hot_labels (np.array) #[1,0,0,0,1,0]
@@ -70,7 +74,7 @@ class Preprocessor:
     
     # vectorization 
     def count_vectorization(self, train_x, validate_x, test_x):
-        vector = CountVectorizer()
+        vector = CountVectorizer(tokenizer=lambda x:x, preprocessor=lambda x:x, stop_words='english')
         train_x_vectorized = vector.fit_transform(train_x)
         validate_x_vectorrized = vector.transform(validate_x)
         test_x_vectorized = vector.transform(test_x)

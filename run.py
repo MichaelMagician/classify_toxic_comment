@@ -3,31 +3,34 @@ import yaml
 import argparse
 from module import preprocessor, predictor, trainer
 
-if __name__ == 'main':
-    # set up logging
+def parse_args_and_set_up_logger():
     parser = argparse.ArgumentParser(description='parse arguments')
-    parser.add_argument('--config', type=str, required=True)
-    parser.add_argument('--log_level', type=str, default='INFO')
+    parser.add_argument('--config', type=str, required=True)    
     args = parser.parse_args()
 
-    logging.basicConfig(level=args.log_level)
+    logging.basicConfig()
     logger = logging.getLogger()
 
     config = None
     with open(args.config, 'r') as config_file:
         try:
-            config = yaml.load(config_file)            
+            config = yaml.safe_load(config_file)            
         except Exception as e:
             logger.error(e)
+    return logger,config
+
+if __name__ == '__main__':
+    
+    logger, config = parse_args_and_set_up_logger()
                 
     preprocessor = preprocessor.Preprocessor(config['preprocessing'], logger)
     train_x, train_y, validate_x, validate_y, test_X, ids = preprocessor.process()
     trainer = trainer.Trainer(config['training'], logger)
     model = trainer.fit(train_x, train_y)
     metrics = trainer.validate(validate_x, validate_y)
-    print(metrics + ': ' + metrics)
+    print( f'metrics: {metrics}'  )
 
-    predictor = predictor.Predictor(config['training'], logger)
+    predictor = predictor.Predictor(config['predict'], logger, model)
     probs = predictor.predict(test_X)
     predictors = predictor.save_csv(ids, probs)
 
