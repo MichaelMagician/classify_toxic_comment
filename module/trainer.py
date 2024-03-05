@@ -1,5 +1,7 @@
 from  module.model.naive_bayse import NaiveBayes
+from  module.model.textcnn import TextCnn
 from sklearn.metrics import accuracy_score
+
 
 class Trainer:
     def __init__(self,config, logger):
@@ -10,6 +12,9 @@ class Trainer:
     def select_model(self):
         if self.config['model_name'] == 'naivebayse':
             self.model = NaiveBayes(self.config['classes'], self.logger)
+        elif self.config['model_name'] == 'textcnn':
+            self.model = TextCnn(self.config['classes'], self.logger)
+
 
     def fit(self, X, y):
         self.model.fit(X, y)

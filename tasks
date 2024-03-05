@@ -1,10 +1,10 @@
-venv
-requirement.txt
-folder structure
-config
-preprocessor
-trainer
-predictor
-metrics
+submit score
 
-first model: naive bayes
+textcnn
+    config
+    preprocessing(word to id)
+    model
+textrnn
+    config
+    preprocessing
+    model

@@ -4,8 +4,10 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 from pandas import DataFrame
 import nltk
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 import numpy as np
+import tensorflow as tf
+import keras 
 
 class Preprocessor:
 
@@ -36,6 +38,8 @@ class Preprocessor:
         input_convertor = self.config['input_convertor']
         if(input_convertor == 'count_vectorization'):
             train_x, validate_x, test_X = self.count_vectorization(train_x, validate_x, test_X)         
+        if(input_convertor == 'cnn_vectorization'):
+            train_x, validate_x, test_X = self.cnn_vectorization(train_x, validate_x, test_X)         
         else:
             raise Exception('not supported convertor')    
         return train_x, train_y, validate_x, validate_y, test_X, ids
@@ -69,8 +73,7 @@ class Preprocessor:
         words = nltk.word_tokenize(s)
 
         tokenized_list = [w.translate(translator) for w in words if len(w.translate(translator)) > 0]    
-        return tokenized_list  
-    
+        return tokenized_list      
     
     # vectorization 
     def count_vectorization(self, train_x, validate_x, test_x):
@@ -80,3 +83,46 @@ class Preprocessor:
         test_x_vectorized = vector.transform(test_x)
         return train_x_vectorized, validate_x_vectorrized, test_x_vectorized
 
+    def tfidf_vectorization(self, train_x, validate_x, test_x):
+        vector = TfidfVectorizer(tokenizer=lambda x:x, preprocessor=lambda x:x, stop_words='english')
+        train_x_vectorized = vector.fit_transform(train_x)
+        validate_x_vectorrized = vector.transform(validate_x)
+        test_x_vectorized = vector.transform(test_x)
+        return train_x_vectorized, validate_x_vectorrized, test_x_vectorized
+
+    def cnn_vectorization(self, train_x, validate_x, test_x): 
+        '''
+        turn words into id vectors
+        '''
+        #sentence to word ids
+        self.word2id ={}
+        self.id2word ={}
+        special_tokens = ['<pad>','<unk>']
+
+        for token in special_tokens:
+            Preprocessor.addchar(self.word2id, self.id2word, token)
+        
+        for sentence in train_x:
+            for word in sentence:
+                Preprocessor.addchar(self.word2id, self.id2word, token)
+            
+        # word ids
+        train_x_vectorized = self.cnn_get_word_id_list(train_x, self.word2id)
+        validate_x_vectorrized = self.cnn_get_word_id_list(validate_x, self.word2id)
+        test_x_vectorized = self.cnn_get_word_id_list(test_x, self.word2id)
+
+        return train_x_vectorized, validate_x_vectorrized, test_x_vectorized
+    
+    def cnn_get_word_id_list(self, x, word2id):
+        r = []
+        for sentence in x:
+            ids = [word2id.get(w, '<unk>') for w in sentence]
+            r.append(ids)
+        ids = keras.utils.pad_sequences(r, maxlen=len(self.config['max_len']), padding='post', value='<pad>')
+        return ids
+
+    @classmethod
+    def addchar(word2id, id2word, word):
+        id = len(word2id)
+        word2id[word] = id
+        id2word[id] = word
