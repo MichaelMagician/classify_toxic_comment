@@ -23,9 +23,9 @@ if __name__ == '__main__':
     
     logger, config = parse_args_and_set_up_logger()
                 
-    preprocessor = preprocessor.Preprocessor(config['preprocessing'], logger)
-    train_x, train_y, validate_x, validate_y, test_X, ids = preprocessor.process()
-    trainer = trainer.Trainer(config['training'], logger)
+    pre_processor = preprocessor.Preprocessor(config['preprocessing'], logger)
+    train_x, train_y, validate_x, validate_y, test_X, ids = pre_processor.process()
+    trainer = trainer.Trainer(config['training'], logger, pre_processor.additional_data)
     model = trainer.fit(train_x, train_y)
     metrics = trainer.validate(validate_x, validate_y)
     print( f'metrics: {metrics}'  )

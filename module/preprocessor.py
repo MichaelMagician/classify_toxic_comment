@@ -14,6 +14,7 @@ class Preprocessor:
     def __init__(self, config, logger):
         self.config = config
         self.logger = logger
+        self.additional_data = {}
     
     def _get_train_data(self):
         return pd.read_csv(self.config['input_trainset'])
@@ -38,8 +39,8 @@ class Preprocessor:
         input_convertor = self.config['input_convertor']
         if(input_convertor == 'count_vectorization'):
             train_x, validate_x, test_X = self.count_vectorization(train_x, validate_x, test_X)         
-        if(input_convertor == 'cnn_vectorization'):
-            train_x, validate_x, test_X = self.cnn_vectorization(train_x, validate_x, test_X)         
+        if(input_convertor == 'nn_vectorization'):
+            train_x, validate_x, test_X = self.nn_vectorization(train_x, validate_x, test_X)         
         else:
             raise Exception('not supported convertor')    
         return train_x, train_y, validate_x, validate_y, test_X, ids
@@ -90,7 +91,7 @@ class Preprocessor:
         test_x_vectorized = vector.transform(test_x)
         return train_x_vectorized, validate_x_vectorrized, test_x_vectorized
 
-    def cnn_vectorization(self, train_x, validate_x, test_x): 
+    def nn_vectorization(self, train_x, validate_x, test_x): 
         '''
         turn words into id vectors
         '''
@@ -104,24 +105,25 @@ class Preprocessor:
         
         for sentence in train_x:
             for word in sentence:
-                Preprocessor.addchar(self.word2id, self.id2word, token)
+                Preprocessor.addchar(self.word2id, self.id2word, word)
             
         # word ids
         train_x_vectorized = self.cnn_get_word_id_list(train_x, self.word2id)
         validate_x_vectorrized = self.cnn_get_word_id_list(validate_x, self.word2id)
         test_x_vectorized = self.cnn_get_word_id_list(test_x, self.word2id)
 
+        self.additional_data['vocab_size'] = len(self.word2id.keys())
         return train_x_vectorized, validate_x_vectorrized, test_x_vectorized
     
     def cnn_get_word_id_list(self, x, word2id):
         r = []
         for sentence in x:
-            ids = [word2id.get(w, '<unk>') for w in sentence]
+            ids = [word2id.get(w, word2id['<unk>']) for w in sentence]
             r.append(ids)
-        ids = keras.utils.pad_sequences(r, maxlen=len(self.config['max_len']), padding='post', value='<pad>')
+        ids = keras.utils.pad_sequences(r, maxlen=self.config['maxlen'], padding='post', value=word2id['<pad>'])
         return ids
 
-    @classmethod
+    @staticmethod
     def addchar(word2id, id2word, word):
         id = len(word2id)
         word2id[word] = id
