@@ -1,15 +1,23 @@
 from  module.model.naive_bayse import NaiveBayes
+from  module.model.textcnn import TextCnn
+from  module.model.textrnn import TextRnn
 from sklearn.metrics import accuracy_score
 
 class Trainer:
-    def __init__(self,config, logger):
+    def __init__(self,config, logger, params=None):
         self.config = config
-        self.logger = logger        
+        self.logger = logger                
+        self.params = params
         self.select_model()
 
     def select_model(self):
         if self.config['model_name'] == 'naivebayse':
             self.model = NaiveBayes(self.config['classes'], self.logger)
+        elif self.config['model_name'] == 'textcnn':
+            self.model = TextCnn(self.config, self.logger ,self.params)
+        elif self.config['model_name'] == 'textrnn':
+            self.model = TextRnn(self.config, self.logger ,self.params)
+
 
     def fit(self, X, y):
         self.model.fit(X, y)
