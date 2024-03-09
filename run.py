@@ -25,6 +25,7 @@ if __name__ == '__main__':
                 
     pre_processor = preprocessor.Preprocessor(config['preprocessing'], logger)
     train_x, train_y, validate_x, validate_y, test_X, ids = pre_processor.process()
+    
     trainer = trainer.Trainer(config['training'], logger, pre_processor.additional_data)
     model = trainer.fit(train_x, train_y)
     metrics = trainer.validate(validate_x, validate_y)

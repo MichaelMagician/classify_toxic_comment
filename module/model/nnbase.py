@@ -12,7 +12,7 @@ class NnBase(object):
         pass
 
     def fit(self, train_x, train_y):        
-        self.model.fit(train_x, train_y, epochs=self.config['epochs'], verbose=True,batch_size=self.config['batch_size'])
+        self.model.fit(train_x, train_y, epochs=self.config['epochs'], batch_size=self.config['batch_size'])
 
     def predict(self, train_x) -> np.ndarray:
         predictions = self.model.predict(train_x)

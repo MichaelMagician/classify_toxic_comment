@@ -1,10 +1,10 @@
-submit score
-
-textcnn
-    config
-    preprocessing(word to id)
-    model
-textrnn
+Preprocessor
+    load embeding
+    train_x, train_y, 
+nn
+    config    
+predefined embedding in layer of the model ?
+BiLSTM
     config
     preprocessing
     model
