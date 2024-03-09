@@ -8,6 +8,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 import numpy as np
 import tensorflow as tf
 import keras 
+import csv
 
 class Preprocessor:
 
@@ -99,21 +100,25 @@ class Preprocessor:
         self.word2id ={}
         self.id2word ={}
         special_tokens = ['<pad>','<unk>']
-
+       
         for token in special_tokens:
             Preprocessor.addchar(self.word2id, self.id2word, token)
-        
+
         for sentence in train_x:
             for word in sentence:
                 Preprocessor.addchar(self.word2id, self.id2word, word)
             
         # word ids
-        train_x_vectorized = self.cnn_get_word_id_list(train_x, self.word2id)
-        validate_x_vectorrized = self.cnn_get_word_id_list(validate_x, self.word2id)
-        test_x_vectorized = self.cnn_get_word_id_list(test_x, self.word2id)
+        train_x_word_ids = self.cnn_get_word_id_list(train_x, self.word2id)
+        validate_x_word_ids = self.cnn_get_word_id_list(validate_x, self.word2id)
+        test_x_word_ids = self.cnn_get_word_id_list(test_x, self.word2id)
 
         self.additional_data['vocab_size'] = len(self.word2id.keys())
-        return train_x_vectorized, validate_x_vectorrized, test_x_vectorized
+
+        if self.config.get('use_predefined_embedding', False):
+            self.process_predined_embedding()
+
+        return train_x_word_ids, validate_x_word_ids, test_x_word_ids
     
     def cnn_get_word_id_list(self, x, word2id):
         r = []
@@ -128,3 +133,24 @@ class Preprocessor:
         id = len(word2id)
         word2id[word] = id
         id2word[id] = word
+
+    def process_predined_embedding(self):
+        # load the embedding
+        # process the embedding with the word in the vocabulary
+        # embedding.columns =[ 'word' ] + [ f'e_{i} ' for i in range(embedding.shape[1] -1)]       
+        # embedding_dict = embedding.set_index('word').to_dict('index')
+        # embedding_dict['<unk>'] = np.zeros((1,embedding.shape[1] -1))
+        embedding = pd.read_csv(self.config['predefined_embedding_path'], quoting=csv.QUOTE_NONE, delimiter=' ')
+        embedding.columns =[ 'token' ] + [ f'e_{i} ' for i in range(embedding.shape[1] -1)]       
+        # embedding_dict = {embedding.iloc[i,0]: embedding.iloc[i,1:].to_list() for i in range(embedding.shape[0])}
+        # embedding_dict['<unk>'] = np.zeros((1,embedding.shape[1] -1))
+        # embedding_matrix = [embedding_dict.get(f'<{w}>', embedding_dict['<unk>']) for w in self.word2id.keys()]
+        df_vocab = pd.DataFrame(self.word2id.keys(), columns=['word'])
+        embedding_matrix = df_vocab.merge(embedding, left_on='word', right_on='token', how='left')
+        embedding_matrix.fillna(0, inplace=True )
+        values = embedding_matrix.iloc[:,2:].to_numpy()
+        self.additional_data['embedding_matrix'] = values
+
+
+        
+

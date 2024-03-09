@@ -12,7 +12,7 @@
             "console": "integratedTerminal",
             "args": [
                 "--config",
-                "./config/cnn_config.yaml"
+                "./config/lstm_config.yaml"
             ]
         }
     ]
