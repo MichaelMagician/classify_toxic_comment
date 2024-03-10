@@ -3,6 +3,7 @@ from  module.model.textcnn import TextCnn
 from  module.model.textrnn import TextRnn
 from  module.model.textbilstm import TextBiLSTM
 from sklearn.metrics import accuracy_score
+from module.model.transformer import TransformerClassifier
 
 class Trainer:
     def __init__(self,config, logger, params=None):
@@ -20,6 +21,8 @@ class Trainer:
             self.model = TextRnn(self.config, self.logger ,self.params)
         elif self.config['model_name'] == 'textBiLSTM':
             self.model = TextBiLSTM(self.config, self.logger,self.params)
+        elif self.config['model_name'] == 'textBiLSTM':
+            self.model = TransformerClassifier(self.config, self.logger,self.params)
 
     def fit(self, X, y):
         self.model.fit(X, y)

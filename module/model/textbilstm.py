@@ -18,7 +18,7 @@ class TextBiLSTM(NnBase):
         else:
             model.add(Embedding(self.params['vocab_size'], self.config['embedding_dim'], trainable=True, embeddings_initializer='uniform'))
         
-        model.add(Bidirectional(LSTM(128)))
+        model.add(Bidirectional(LSTM(80)))
         model.add(Dense(len(self.config['classes']), activation='sigmoid'))
 
         model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
