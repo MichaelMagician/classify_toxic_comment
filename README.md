@@ -10,7 +10,7 @@ himl hiera/model=naivebayse/ --output-file config/nb_config.yaml
 himl hiera/model=textcnn/ --output-file config/cnn_config.yaml
 himl hiera/model=textrnn/ --output-file config/rnn_config.yaml
 himl hiera/model=textBiLSTM/ --output-file config/lstm_config.yaml
-himl hiera/model=textBiLSTM/ --output-file config/transformer_config.yaml
+himl hiera/model=transformer/ --output-file config/transformer_config.yaml
 ```
 
 ### run

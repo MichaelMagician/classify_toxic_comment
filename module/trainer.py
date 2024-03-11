@@ -21,7 +21,7 @@ class Trainer:
             self.model = TextRnn(self.config, self.logger ,self.params)
         elif self.config['model_name'] == 'textBiLSTM':
             self.model = TextBiLSTM(self.config, self.logger,self.params)
-        elif self.config['model_name'] == 'textBiLSTM':
+        elif self.config['model_name'] == 'transformer':
             self.model = TransformerClassifier(self.config, self.logger,self.params)
 
     def fit(self, X, y):

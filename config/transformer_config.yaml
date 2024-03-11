@@ -12,7 +12,7 @@ preprocessing:
   - identity_hate
   input_text_column: comment_text
   input_id_column: id
-  maxlen: 32
+  maxlen: 128
   skip_tokenization: false
   batch_size: 32,
   use_predefined_embedding: true
@@ -26,7 +26,7 @@ training:
   epochs: 1
   gradient_cliping: true
   batch_size: 32
-  embedding_dim: 300
+  embedding_dim: 100
   maxlen: 128
   predict_only: false
   output_path: ./output
@@ -37,7 +37,9 @@ training:
   - threat
   - insult
   - identity_hate
-  model_name: textBiLSTM
+  model_name: transformer
+  num_heads: 2
+  ff_dim: 100
 predict:
   output_path: ./data/submission.csv
   enable_calibration: false
