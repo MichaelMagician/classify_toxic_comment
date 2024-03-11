@@ -25,4 +25,5 @@ naive bayse: 0.68
 cnn: 0.62
 rnn:0.50
 lstm:0.60
+transformer:0.61
 
