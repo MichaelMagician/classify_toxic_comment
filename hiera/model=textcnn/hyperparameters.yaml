@@ -1,11 +1,11 @@
 preprocessing:
   input_convertor: 'nn_vectorization'
-  maxlen: 32  
+  maxlen: 128  
   use_predefined_embedding: false
   predefined_embedding_path: './data/embedding_min.csv'
 training:
   model_name: 'textcnn'
   learning_rate: 0.7
-  embedding_dim: 100  
-  maxlen: 32
+  embedding_dim: 128  
+  maxlen: 128
 

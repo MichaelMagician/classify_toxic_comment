@@ -1,10 +1,10 @@
 preprocessing:
   input_convertor: 'nn_vectorization'  
-  maxlen: 32  
+  maxlen: 128  
   predefined_embedding_path: './data/glove.twitter.27B.100d_min.txt'
   use_predefined_embedding: true
 training:
   model_name: 'textBiLSTM'
   learning_rate: 0.7
-  embedding_dim: 300  
+  embedding_dim: 128  
   epochs: 1  
