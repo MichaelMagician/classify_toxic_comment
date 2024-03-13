@@ -17,8 +17,8 @@ preprocessing:
   batch_size: 32,
   use_predefined_embedding: false
 training:
-  learning_rate: 1.0
-  dropout_rate: 0.5
+  learning_rate: 0.3
+  dropout_rate: 0.1
   batch_normalization: True
   optimizer: 'sgd'
   epochs: 1

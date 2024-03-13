@@ -1,13 +1,15 @@
 import numpy as np
 from keras import Sequential
-from keras.layers import Conv1D, Dense, MaxPooling1D, Flatten, Embedding, Dropout, LSTM, Bidirectional
+from keras.layers import Conv1D, Dense, MaxPooling1D, Flatten, Embedding, Dropout, LSTM, Bidirectional, Input
 from keras.optimizers import Adam
 from module.model.nnbase import NnBase
 import tensorflow as tf
 
 class TextBiLSTM(NnBase):    
     def _build_model(self):
+        maxlen = self.config['maxlen']
         model = Sequential()
+        inputs = Input(shape=(maxlen,))
 
         if self.params.get('embedding_matrix', None) is not None:
             o_dim = self.params['embedding_matrix'].shape[1]

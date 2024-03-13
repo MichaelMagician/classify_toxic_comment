@@ -1,3 +1,4 @@
+from module.model.grucnn import TextGruCnn
 from  module.model.naive_bayse import NaiveBayes
 from  module.model.textcnn import TextCnn
 from  module.model.textrnn import TextRnn
@@ -23,6 +24,8 @@ class Trainer:
             self.model = TextBiLSTM(self.config, self.logger,self.params)
         elif self.config['model_name'] == 'transformer':
             self.model = TransformerClassifier(self.config, self.logger,self.params)
+        elif self.config['model_name'] == 'textgrucnn':
+            self.model = TextGruCnn(self.config, self.logger,self.params)            
 
     def fit(self, X, y):
         self.model.fit(X, y)
