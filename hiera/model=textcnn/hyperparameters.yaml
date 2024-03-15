@@ -8,4 +8,6 @@ training:
   learning_rate: 0.7
   embedding_dim: 128  
   maxlen: 128
+predict:
+  output_path: ./data/submission_cnn.csv
 

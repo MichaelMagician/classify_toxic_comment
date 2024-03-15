@@ -9,3 +9,5 @@ training:
   epochs: 1
   num_heads: 2
   ff_dim: 100
+predict:
+  output_path: ./data/submission_transformer.csv

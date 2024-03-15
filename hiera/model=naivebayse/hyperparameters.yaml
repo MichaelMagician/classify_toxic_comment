@@ -2,3 +2,5 @@ preprocessing:
   input_convertor: 'count_vectorization'
 training:
   model_name: 'naivebayse'
+predict:
+  output_path: ./data/submission_nb.csv

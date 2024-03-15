@@ -8,4 +8,6 @@ training:
   learning_rate: 0.7
   embedding_dim: 128  
   epochs: 3
+predict:
+  output_path: ./data/submission_rnn.csv
 

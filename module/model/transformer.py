@@ -5,7 +5,7 @@ from keras.layers import Dense, MaxPooling1D, Flatten, Embedding, Dropout, Layer
 from keras.optimizers import Adam
 from module.model.nnbase import NnBase
 import tensorflow as tf
-import keras.ops as ops
+import keras
 
 class TransformerClassifier(NnBase):    
     def _build_model(self):
@@ -74,8 +74,8 @@ class TokenAndPositionEmbedding(Layer):
         self.pos_emb = Embedding(input_dim=maxlen, output_dim=embed_dim)
 
     def call(self, x):
-        maxlen = ops.shape(x)[-1]
-        positions = ops.arange(0, maxlen, 1)
+        maxlen = keras.ops.shape(x)[-1]
+        positions = keras.ops.arange(0, maxlen, 1)
         positions = self.pos_emb(positions)
         x = self.token_emb(x)
         return x + positions

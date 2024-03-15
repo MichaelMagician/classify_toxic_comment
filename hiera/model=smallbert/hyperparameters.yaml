@@ -1,0 +1,11 @@
+preprocessing:
+  input_convertor: 'tf_dataset'      
+  use_predefined_embedding: False  
+  skip_tokenization: True
+training:
+  model_name: 'smallbert'
+  learning_rate: 0.1
+  embedding_dim: 128  
+  epochs: 1    
+predict:
+  output_path: ./data/submission_bert.csv
