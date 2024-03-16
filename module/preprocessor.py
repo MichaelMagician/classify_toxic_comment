@@ -45,8 +45,8 @@ class Preprocessor:
         elif(input_convertor == 'nn_vectorization'):
             train_x, validate_x, test_X = self.nn_vectorization(train_x, validate_x, test_X)    
         elif(input_convertor == 'tf_dataset'):
-            train_ds, validate_ds, test_ds = self.tf_dataset(train_x, validate_x, test_X, train_y, validate_y)    
-            return train_ds, validate_ds, test_ds, ids    
+            train_ds, validate_ds, validate_x_ds, test_ds = self.tf_dataset(train_x, validate_x, test_X, train_y, validate_y)    
+            return train_ds, validate_ds, validate_x_ds, validate_y, test_ds, ids    
         else:
             raise Exception('not supported convertor')    
         
@@ -97,12 +97,13 @@ class Preprocessor:
         validate_x_vectorrized = vector.transform(validate_x)
         test_x_vectorized = vector.transform(test_x)
         return train_x_vectorized, validate_x_vectorrized, test_x_vectorized
-
-    def tf_dataset(self, train_x, validate_x, test_X, train_y, validate_y):
-        train_ds = tf.data.Dataset.from_tensor_slices((train_x, train_y))
-        validate_ds = tf.data.Dataset.from_tensor_slices((validate_x, validate_y))
-        test_ds = tf.data.Dataset.from_tensor_slices(test_X)
-        return train_ds, validate_ds, test_ds
+    
+    def tf_dataset(self, train_x, validate_x, test_X, train_y, validate_y):   
+        train_ds = tf.data.Dataset.from_tensors((train_x, train_y))
+        validate_ds = tf.data.Dataset.from_tensors((validate_x, validate_y))
+        validate_x_ds = tf.data.Dataset.from_tensors(validate_x)
+        test_ds = tf.data.Dataset.from_tensors(test_X)
+        return train_ds, validate_ds, validate_x_ds, test_ds
 
     def nn_vectorization(self, train_x, validate_x, test_x): 
         '''
