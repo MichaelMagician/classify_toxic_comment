@@ -23,9 +23,11 @@ class Preprocessor:
     def _get_test_data(self):
         return pd.read_csv(self.config['input_testset'])
 
-    def process(self) ->tuple[np.ndarray, np.ndarray,np.ndarray,np.ndarray,np.ndarray]:
+    def process(self): 
         '''
         return train_x, train_y, validate_x, validate_y, test_X, ids
+        or 
+        return train_ds, validate_ds, test_ds, ids  
         '''
         test_data = self._get_test_data()
         train_data = self._get_train_data()
@@ -40,11 +42,15 @@ class Preprocessor:
         input_convertor = self.config['input_convertor']
         if(input_convertor == 'count_vectorization'):
             train_x, validate_x, test_X = self.count_vectorization(train_x, validate_x, test_X)         
-        if(input_convertor == 'nn_vectorization'):
-            train_x, validate_x, test_X = self.nn_vectorization(train_x, validate_x, test_X)         
+        elif(input_convertor == 'nn_vectorization'):
+            train_x, validate_x, test_X = self.nn_vectorization(train_x, validate_x, test_X)    
+        elif(input_convertor == 'tf_dataset'):
+            train_ds, validate_ds, validate_x_ds, test_ds = self.tf_dataset(train_x, validate_x, test_X, train_y, validate_y)    
+            return train_ds, validate_ds, validate_x_ds, validate_y, test_ds, ids    
         else:
             raise Exception('not supported convertor')    
-        return train_x, train_y, validate_x, validate_y, test_X, ids
+        
+        return train_x, train_y, validate_x, validate_y, test_X, ids    
     
     def _parse(self, df: DataFrame, is_test=False) -> tuple[np.ndarray, np.ndarray]:
         '''
@@ -91,6 +97,13 @@ class Preprocessor:
         validate_x_vectorrized = vector.transform(validate_x)
         test_x_vectorized = vector.transform(test_x)
         return train_x_vectorized, validate_x_vectorrized, test_x_vectorized
+    
+    def tf_dataset(self, train_x, validate_x, test_X, train_y, validate_y):   
+        train_ds = tf.data.Dataset.from_tensors((train_x, train_y))
+        validate_ds = tf.data.Dataset.from_tensors((validate_x, validate_y))
+        validate_x_ds = tf.data.Dataset.from_tensors(validate_x)
+        test_ds = tf.data.Dataset.from_tensors(test_X)
+        return train_ds, validate_ds, validate_x_ds, test_ds
 
     def nn_vectorization(self, train_x, validate_x, test_x): 
         '''

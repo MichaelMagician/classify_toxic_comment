@@ -15,7 +15,7 @@ preprocessing:
   maxlen: 128
   skip_tokenization: False
   batch_size: 32,
-  use_predefined_embedding: false
+  use_predefined_embedding: False
 training:
   learning_rate: 0.3
   dropout_rate: 0.1

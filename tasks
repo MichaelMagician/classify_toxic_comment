@@ -1,21 +1,12 @@
-Preprocessor
-    load embeding
 
-transformer classifier
-    encoder
-        embedding
-            position embedding
-            token embedding
-        transformer_block
-            multihead-attention layer
-            self-attention
-                attention
-                    * query, key, value matmul
-                    * scale
-                    * softmax
-                activation with relu
-        add & normolization                   
-        forward feeed
+bert
+dataset
+    train_ds, val_ds, test_ds
+preprocessor
+trainer
 
+BERT model selected           : https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-4_H-512_A-8/1
+Preprocess model auto-selected: https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3
 
-    decoder    
+classifier
+optimizer

@@ -8,3 +8,5 @@ training:
   learning_rate: 0.7
   embedding_dim: 128  
   epochs: 1  
+predict:
+  output_path: ./data/submission_lstm.csv

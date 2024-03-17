@@ -12,7 +12,7 @@
             "console": "integratedTerminal",
             "args": [
                 "--config",
-                "./config/transformer_config.yaml"
+                "./config/smallbert_config.yaml"
             ]
         }
     ]

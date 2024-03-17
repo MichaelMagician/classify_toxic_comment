@@ -12,6 +12,7 @@ himl hiera/model=textrnn/ --output-file config/rnn_config.yaml
 himl hiera/model=textBiLSTM/ --output-file config/lstm_config.yaml
 himl hiera/model=transformer/ --output-file config/transformer_config.yaml
 himl hiera/model=grucnn/ --output-file config/grucnn_config.yaml
+himl hiera/model=smallbert/ --output-file config/smallbert_config.yaml
 ```
 
 ### run
@@ -21,6 +22,7 @@ python run.py --config config/rnn_config.yaml
 python run.py --config config/lstm_config.yaml
 python run.py --config config/transformer_config.yaml
 python run.py --config config/grucnn_config.yaml
+python run.py --config config/smallbert_config.yaml
 
 ### scores
 naive bayse: 0.68
