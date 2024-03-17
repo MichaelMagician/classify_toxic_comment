@@ -1,12 +1,27 @@
 
-bert
-dataset
-    train_ds, val_ds, test_ds
-preprocessor
-trainer
+calibration
 
-BERT model selected           : https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-4_H-512_A-8/1
-Preprocess model auto-selected: https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3
+config
+    enable calibration
+    output
 
-classifier
-optimizer
+run:
+    predictor.train_calibrator()
+    predictor.predict()
+
+preditor
+    train_calibrator
+        calibrator.fit()
+    predict_raw    
+    predict_prob
+        predict_raw and calibrate prob
+    calibrate
+        calibrate prob of each feature    
+
+calibrator
+    pick model
+    calculate_ece
+    fit(prob, true_labels)
+    calibrate(prob)
+    draw reliability chart and output to folder
+

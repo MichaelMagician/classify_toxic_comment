@@ -43,6 +43,8 @@ if __name__ == '__main__':
 
         #predict
         predictor = predictor.Predictor(config['predict'], logger, model)
+        if config['predict']['enable_calibration']:
+            predictor.train_calibrator(validate_x, validate_y)
         probs = predictor.predict(test_X)
         predictors = predictor.save_csv(ids, probs)
     except Exception as e:
