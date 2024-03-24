@@ -12,19 +12,21 @@ preprocessing:
   - identity_hate
   input_text_column: comment_text
   input_id_column: id
-  maxlen: 32
+  maxlen: 128
   skip_tokenization: false
-  batch_size: 32
+  batch_size: 32,
+  use_predefined_embedding: false
   input_convertor: nn_vectorization
+  predefined_embedding_path: ./data/embedding_min.csv
 training:
   learning_rate: 0.7
-  dropout_rate: 0.5
+  dropout_rate: 0.1
   batch_normalization: true
   optimizer: sgd
   epochs: 3
   gradient_cliping: true
   batch_size: 32
-  embedding_dim: 100
+  embedding_dim: 128
   maxlen: 128
   predict_only: false
   output_path: ./output
@@ -37,8 +39,8 @@ training:
   - identity_hate
   model_name: textrnn
 predict:
-  output_path: ./data/submission.csv
-  enable_calibration: false
+  output_path: ./data/submission_rnn.csv
+  enable_calibration: True
   calibrator_type: platt_scaling
   calibrators_output_path: ./output
   debug_validation: false

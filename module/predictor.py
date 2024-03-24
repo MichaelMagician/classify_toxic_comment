@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-
 from module.calibrator import Calibrator
 
 class Predictor(object):
@@ -8,20 +7,27 @@ class Predictor(object):
         self.config = config
         self.logger = logger
         self.model = model        
-        self.calibrator = Calibrator(config, logger) if self.config['enable_calibration'] else None
+        self.calibrators = [Calibrator(config, logger) for i in range(len(self.config['classes'])) ] if self.config['enable_calibration'] else None
 
     def predict(self,X) -> np.array:
-        if self.calibrator is not None :
-            return self.predict_proba(X) >= 0.5
+        if self.calibrators is not None :
+            return 1 if self.predict_proba(X) >= 0.5 else 0
         else:
             return self.model.predict(X)
 
     def predict_proba(self,X) -> np.array:
         prob = self.model.predict_proba(X)
-        return prob if self.calibrator is None else self.calibrator.calibrate(prob)        
+        return prob if self.calibrators is None else self._calibrate(prob)        
     
-    def train_validator(self, validate_x, validate_y):
-        self.calibrators.fit(validate_y, self.model.predict_proba(validate_x))
+    def _calibrate(self, prob):
+        r = [ self.calibrators[i].calibrate(prob[:,i]) for i in range(len(self.calibrators))]
+        r = np.stack(r, axis=1)
+        return r
+    
+    def train_calibrator(self, validate_x, validate_y):
+        pred_probs = self.model.predict_proba(validate_x)
+        for i in range(len(self.calibrators)):
+            self.calibrators[i].fit(validate_y[:,i], pred_probs[:,i] )
 
     def save_csv(self, test_ids, probs):
         columns = ['id'] + self.config['classes']

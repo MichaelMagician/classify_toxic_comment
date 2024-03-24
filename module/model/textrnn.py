@@ -10,10 +10,12 @@ class TextRnn(NnBase):
         maxlen = self.config['maxlen']
         model = Sequential()
         inputs = Input(shape=(maxlen,))
+        model.add(inputs)
         model.add(Embedding(self.params['vocab_size'], self.config['embedding_dim'], trainable=True, embeddings_initializer='uniform'))
         model.add(SimpleRNN(128))
         model.add(Dense(len(self.config['classes']), activation='sigmoid'))
 
+        
         model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
         model.summary()
         
