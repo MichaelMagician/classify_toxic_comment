@@ -11,6 +11,7 @@ class TextCnn(NnBase):
         maxlen = self.config['maxlen']
         model = Sequential()
         inputs = Input(shape=(maxlen,))
+        model.add(inputs)
         model.add(Embedding(self.params['vocab_size'], self.config['embedding_dim']))
         model.add(Conv1D(128, 7,activation='relu', padding='same'))
         model.add(MaxPooling1D())
@@ -24,7 +25,7 @@ class TextCnn(NnBase):
         model.add(Dense(len(self.config['classes'])))
         model.add(Dense(len(self.config['classes']), activation='sigmoid'))
 
-        model(inputs=inputs)
+        # model(inputs=inputs)
         model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
         model.summary()
         

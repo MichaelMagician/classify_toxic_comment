@@ -5,7 +5,7 @@ preprocessing:
   predefined_embedding_path: './data/embedding_min.csv'
 training:
   model_name: 'textrnn'
-  learning_rate: 0.7
+  learning_rate: 0.01
   embedding_dim: 128  
   epochs: 3
 predict:

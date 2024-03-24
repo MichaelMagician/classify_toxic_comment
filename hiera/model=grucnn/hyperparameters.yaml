@@ -4,7 +4,7 @@ preprocessing:
   use_predefined_embedding: true
 training:
   model_name: 'textgrucnn'
-  learning_rate: 0.7
+  learning_rate: 0.01
   embedding_dim: 128  
   epochs: 1  
 predict:

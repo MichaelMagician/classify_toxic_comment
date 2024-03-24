@@ -19,7 +19,7 @@ preprocessing:
   input_convertor: nn_vectorization
   predefined_embedding_path: ./data/embedding_min.csv
 training:
-  learning_rate: 0.7
+  learning_rate: 0.01
   dropout_rate: 0.1
   batch_normalization: true
   optimizer: sgd
@@ -40,7 +40,7 @@ training:
   model_name: textrnn
 predict:
   output_path: ./data/submission_rnn.csv
-  enable_calibration: True
+  enable_calibration: false
   calibrator_type: platt_scaling
   calibrators_output_path: ./output
   debug_validation: false

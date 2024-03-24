@@ -19,7 +19,7 @@ preprocessing:
   input_convertor: nn_vectorization
   predefined_embedding_path: ./data/embedding_min.csv
 training:
-  learning_rate: 0.7
+  learning_rate: 0.01
   dropout_rate: 0.1
   batch_normalization: true
   optimizer: sgd
