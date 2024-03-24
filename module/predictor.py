@@ -27,7 +27,9 @@ class Predictor(object):
     def train_calibrator(self, validate_x, validate_y):
         pred_probs = self.model.predict_proba(validate_x)
         for i in range(len(self.calibrators)):
+            category = self.config['classes'][i]
             self.calibrators[i].fit(validate_y[:,i], pred_probs[:,i] )
+            self.calibrators[i].plot_reliability_diagrams(validate_y[:,i], pred_probs[:,i],category)
 
     def save_csv(self, test_ids, probs):
         columns = ['id'] + self.config['classes']

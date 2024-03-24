@@ -1,3 +1,4 @@
+import os
 from numpy import ndarray
 import numpy as np
 from sklearn import calibration
@@ -34,8 +35,9 @@ class Calibrator:
         else:
             return prob
 
-    def draw_reliability_chart(self, y_valid, proba_valid):
-        y_means, proba_means =calibration.calibration_curve(y_valid,proba_valid, normalize=False, n_bins=5, strategy='uniform')
-        plt.plot([0, 1], [0, 1], linestyle = '--', label = 'Perfect calibration')
-        plt.plot(proba_means, y_means)
-        plt.show()
+    def plot_reliability_diagrams(self, y_valid, proba_valid, category):
+        prob_true, prob_pred =calibration.calibration_curve(y_valid,proba_valid, n_bins=10, strategy='uniform')        # plt.plot([0, 1], [0, 1], linestyle = '--', label = 'Perfect calibration')                
+        disp = calibration.CalibrationDisplay(prob_true, prob_pred, proba_valid)
+        disp.plot()
+        save_path = os.path.join(self.config['calibrators_output_path'], f"{category}.png")
+        plt.savefig(fname=save_path, format="png")
